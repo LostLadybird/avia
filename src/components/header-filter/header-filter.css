@@ -1,0 +1,73 @@
+.buttons-wrapper {
+  display: flex;
+  justify-content: right;
+  margin-top: 50px;
+  margin-right: 100px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 20px;
+}
+
+.btn {
+  display: block;
+  width: 168px;
+  height: 50px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  border: 1px solid #dfe5ec;
+  color: #4a4a4a;
+  background-color: #fff;
+  cursor: pointer;
+
+  transition:
+    color 0.2s linear,
+    background-color 0.2s linear;
+  span {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+.btn:hover {
+  color: #fff;
+  background-color: #2196f3;
+}
+.btn:focus {
+  color: #fff;
+  background-color: #2196f3;
+}
+
+@media (max-width: 700px) {
+  .buttons-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    margin-top: 8%;
+  }
+  .buttons {
+    flex-direction: column;
+    width: 100%;
+    align-items: center;
+    margin: 0;
+  }
+  .btn {
+    width: 80%;
+    height: 60px;
+  }
+}
+
+/* ANTD custom styles */
+.ant-radio-button-wrapper {
+  border: 1px solid rgb(221, 221, 221) !important;
+}
+.ant-radio-button-wrapper-checked {
+  color: #fff !important;
+  background-color: #2196f3 !important;
+}

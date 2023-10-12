@@ -1,0 +1,42 @@
+.all-tickets {
+  width: 500px;
+  height: auto;
+  margin-left: auto;
+  margin-right: 100px;
+  padding-bottom: 30px;
+  margin-top: -17%;
+  list-style-type: none;
+  padding: 0;
+}
+.show-more__button {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  background-color: #2196f3;
+  text-transform: uppercase;
+  cursor: pointer;
+
+  transition: 0.1s linear;
+}
+.show-more__button:hover {
+  background-color: #40a3f5;
+}
+
+.loading {
+  position: absolute;
+  left: 55%;
+  top: 24%;
+}
+
+@media (max-width: 700px) {
+  .all-tickets {
+    height: auto;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+  }
+}

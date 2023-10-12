@@ -1,0 +1,9 @@
+.header {
+  width: 100%;
+  padding-top: 30px;
+  text-align: center;
+}
+img {
+  box-shadow: #b4c2db 10px 10px 20px;
+  border-radius: 50%;
+}
