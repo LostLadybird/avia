@@ -23,7 +23,7 @@
     "format": "prettier ./src --write",
     "lint": "eslint \"**/*.{jsx,tsx}\"",
     "lint:fix": "eslint \"**/*.{jsx,tsx}\" --fix --color",
-    "prepare": "husky install"
+    "prepare": "npx husky install"
   },
   "eslintConfig": {
     "extends": [
