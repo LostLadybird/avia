@@ -16,3 +16,14 @@ code {
   width: 960px;
   background-color: #f3f7fa;
 }
+
+h1 {
+  width: 500px;
+  height: auto;
+  margin-left: auto;
+  margin-right: 100px;
+  padding-bottom: 30px;
+  margin-top: -17%;
+  list-style-type: none;
+  padding: 0;
+}

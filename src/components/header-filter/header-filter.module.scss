@@ -1,4 +1,4 @@
-.buttons-wrapper {
+.wrapper {
   display: flex;
   justify-content: right;
   margin-top: 50px;
@@ -34,11 +34,8 @@
     transform: translate(-50%, -50%);
   }
 }
-.btn:hover {
-  color: #fff;
-  background-color: #2196f3;
-}
-.btn:focus {
+.btn:hover,
+.btn:focus .btn.active {
   color: #fff;
   background-color: #2196f3;
 }

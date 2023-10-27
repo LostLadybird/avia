@@ -1,23 +1,29 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { nanoid } from '@reduxjs/toolkit';
+import React, { useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { Spin, Alert } from 'antd';
 
-import { showMoreTickets } from '../../store/ticketSlice';
-import filterTransfers from '../../utilites/filterTransfers';
 import Ticket from '../ticket';
 
-import './tickets-list.css';
+import styles from './tickets-list.module.scss';
 
 const TicketsList = () => {
   const tickets = useSelector((state) => state.tickets.tickets);
-  const { error, extraTickets, showAll, filterValue, isLoading } = useSelector((state) => state.tickets);
+  const { error, status, filters } = useSelector((state) => state.tickets);
 
-  const dispatch = useDispatch();
+  const [extraTickets, setExtraTickets] = useState(5);
 
-  const visibleTickets = tickets.filter((elem) => {
-    return filterTransfers(elem, showAll, filterValue);
-  });
+  const handleShowMore = () => {
+    setExtraTickets(extraTickets + 5);
+  };
+
+  const visibleTickets = useMemo(() => {
+    const activeFilters = filters.filter((elem) => elem.checked);
+    const variable = tickets.filter((elem) => {
+      const data = elem.segments[0].stops.length;
+      return activeFilters.some((elem) => elem.transfers === data);
+    });
+    return variable;
+  }, [tickets, filters]);
 
   const warningMsg = <Alert message="Рейсов, подходящих под заданные фильтры, не найдено." type="info" showIcon />;
   const erorrMsg = <Alert message="Нет результатов. Попробуйте перезагрузить страницу." type="error" />;
@@ -25,9 +31,13 @@ const TicketsList = () => {
   const elements = visibleTickets.slice(0, extraTickets).map((elem) => {
     return (
       <Ticket
-        key={nanoid()}
+        key={`${elem.price}${elem.carrier}${elem.segments[0].date}${elem.segments[1].date}`}
         price={elem.price}
         img={elem.carrier}
+        originTo={elem.segments[0].origin}
+        originFrom={elem.segments[1].origin}
+        destinationTo={elem.segments[0].destination}
+        destinationFrom={elem.segments[1].destination}
         durationThere={elem.segments[0].duration}
         durationBack={elem.segments[1].duration}
         dateThere={elem.segments[0].date}
@@ -38,17 +48,14 @@ const TicketsList = () => {
     );
   });
 
-  const handleShowMore = () => {
-    dispatch(showMoreTickets());
-  };
   return (
-    <ul className="all-tickets">
-      {isLoading && <Spin className="loading" size="large" />}
+    <ul className={styles.tickets}>
+      {status && <Spin className={styles.loading} size="large" />}
       {error && erorrMsg}
-      {!elements && !error && !isLoading && warningMsg}
+      {!elements && !error && !status && warningMsg}
       {elements}
-      <div className="show-more">
-        <button className="show-more__button" type="button" onClick={handleShowMore}>
+      <div className={styles.showMore}>
+        <button className={styles.button} type="button" onClick={handleShowMore}>
           ПОКАЗАТЬ ЕЩЁ 5 БИЛЕТОВ!
         </button>
       </div>

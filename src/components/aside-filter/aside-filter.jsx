@@ -1,87 +1,73 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Checkbox } from 'antd';
 
 import { checkFilterAll, toggleCheck } from '../../store/ticketSlice';
 
-import './aside-filter.css';
+import styles from './aside-filter.module.scss';
 
 const AsideFilter = () => {
-  const [checkedAll, setCheckedAll] = useState(true);
-  const [checkedZero, setCheckedZero] = useState(true);
-  const [checkedOne, setCheckedOne] = useState(true);
-  const [checkedTwo, setCheckedTwo] = useState(true);
-  const [checkedThree, setCheckedThree] = useState(true);
+  const [active, setActive] = useState(true);
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (checkedZero && checkedOne && checkedTwo && checkedThree) {
-      setCheckedAll(true);
-    } else {
-      setCheckedAll(false);
-    }
-  }, [checkedZero, checkedOne, checkedTwo, checkedThree]);
+  const filtersArray = useSelector((state) => state.tickets.filters);
 
-  useEffect(() => {
-    dispatch(checkFilterAll(checkedAll));
-  }, [dispatch, checkedAll]);
+  const checkElement = (id) => {
+    dispatch(toggleCheck(id));
+  };
 
-  useEffect(() => {
-    dispatch(toggleCheck({ isChecked: checkedZero, value: 0 }));
-  }, [dispatch, checkedZero]);
-  useEffect(() => {
-    dispatch(toggleCheck({ isChecked: checkedOne, value: 1 }));
-  }, [dispatch, checkedOne]);
-  useEffect(() => {
-    dispatch(toggleCheck({ isChecked: checkedTwo, value: 2 }));
-  }, [dispatch, checkedTwo]);
-  useEffect(() => {
-    dispatch(toggleCheck({ isChecked: checkedThree, value: 3 }));
-  }, [dispatch, checkedThree]);
+  const checkAllElements = () => {
+    dispatch(checkFilterAll(!active));
+  };
 
-  const filterOnChange = (e) => {
-    switch (e.target.name) {
-      case 'Zero':
-        setCheckedZero(e.target.checked);
-        break;
-      case 'One':
-        setCheckedOne(e.target.checked);
-        break;
-      case 'Two':
-        setCheckedTwo(e.target.checked);
-        break;
-      case 'Three':
-        setCheckedThree(e.target.checked);
-        break;
+  const transferText = (id) => {
+    switch (id) {
+      case 0:
+        return 'Без пересадок';
+      case 1:
+        return '1 пересадка';
+      case 2:
+        return '2 пересадки';
+      case 3:
+        return '3 пересадки';
       default:
-        setCheckedAll(e.target.checked);
-        setCheckedZero(e.target.checked);
-        setCheckedOne(e.target.checked);
-        setCheckedTwo(e.target.checked);
-        setCheckedThree(e.target.checked);
-        break;
+        return;
     }
   };
 
+  useEffect(() => {
+    setActive(filtersArray.every((elem) => elem.checked === true));
+  }, [filtersArray]);
+
   return (
-    <div className="aside">
-      <h2 className="aside__title">КОЛИЧЕСТВО ПЕРЕСАДОК</h2>
-      <Checkbox className="checkbox" name={'All'} checked={checkedAll} onChange={(e) => filterOnChange(e)}>
+    <div className={styles.aside}>
+      <h2 className={styles.title}>КОЛИЧЕСТВО ПЕРЕСАДОК</h2>
+      <Checkbox
+        className={styles.checkbox}
+        name={'All'}
+        key={4}
+        checked={active}
+        id={4}
+        onChange={() => {
+          checkAllElements();
+        }}
+      >
         Все
       </Checkbox>
-      <Checkbox className="checkbox" name={'Zero'} checked={checkedZero} onChange={(e) => filterOnChange(e)}>
-        Без пересадок
-      </Checkbox>
-      <Checkbox className="checkbox" name={'One'} checked={checkedOne} onChange={(e) => filterOnChange(e)}>
-        1 пересадка
-      </Checkbox>
-      <Checkbox className="checkbox" name={'Two'} checked={checkedTwo} onChange={(e) => filterOnChange(e)}>
-        2 пересадки
-      </Checkbox>
-      <Checkbox className="checkbox" name={'Three'} checked={checkedThree} onChange={(e) => filterOnChange(e)}>
-        3 пересадки
-      </Checkbox>
+      {filtersArray.map((elem) => (
+        <Checkbox
+          key={elem.id}
+          className={styles.checkbox}
+          id={elem.id}
+          checked={elem.checked}
+          onChange={() => {
+            checkElement(elem.id);
+          }}
+        >
+          {transferText(elem.id)}
+        </Checkbox>
+      ))}
     </div>
   );
 };

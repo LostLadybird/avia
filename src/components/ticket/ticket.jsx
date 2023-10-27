@@ -3,49 +3,63 @@ import React from 'react';
 import changeWord from '../../utilites/changeWord';
 import durationTime from '../../utilites/durationTime';
 import formatDate from '../../utilites/formatDate';
-import './ticket.css';
+
+import styles from './ticket.module.scss';
 
 const Ticket = (props) => {
-  const { price, img, durationThere, durationBack, dateThere, dateBack, stopsThere, stopsBack } = props;
+  const {
+    price,
+    img,
+    originTo,
+    originFrom,
+    destinationTo,
+    destinationFrom,
+    durationThere,
+    durationBack,
+    dateThere,
+    dateBack,
+    stopsThere,
+    stopsBack,
+  } = props;
 
   const baseURL = 'https://pics.avs.io/99/36/';
 
   return (
-    <li className="ticket">
-      <div className="ticket__header">
-        <p className="ticket__header--price">{price} Р</p>
-        <img className="ticket__header--logo" src={`${baseURL}${img}.png`} alt="logo" />
+    <li className={styles.ticket}>
+      <div className={styles.header}>
+        <p className={styles.price}>{price} Р</p>
+        <img className={styles.logo} src={`${baseURL}${img}.png`} alt="logo" />
       </div>
-      <div className="ticket__content">
-        <div className="ticket__wrapper">
-          <span className="ticket__wrapper--head">MOW - HKT</span>
-          <span className="ticket__wrapper--content">{formatDate(dateThere, durationThere)}</span>
+      <div className={styles.content}>
+        <div className={styles.wrapper}>
+          <span className={styles.wrapperHead}>{`${originTo} - ${destinationTo}`}</span>
+          <span className={styles.wrapperContent}>{formatDate(dateThere, durationThere)}</span>
         </div>
-        <div className="ticket__wrapper">
-          <span className="ticket__wrapper--head">В ПУТИ</span>
-          <span className="ticket__wrapper--content">{durationTime(durationThere)}</span>
+        <div className={styles.wrapper}>
+          <span className={styles.wrapperHead}>В ПУТИ</span>
+          <span className={styles.wrapperContent}>{durationTime(durationThere)}</span>
         </div>
-        <div className="ticket__wrapper">
-          <div className="ticket__wrapper--head">
+        <div className={styles.wrapper}>
+          <div className={styles.wrapperHead}>
             {stopsThere.length} {changeWord(stopsThere.length)}
           </div>
-          <div className="ticket__wrapper--content">HKG, JNB</div>
+          <div className={styles.wrapperContent}>HKG, JNB</div>
         </div>
       </div>
-      <div className="ticket__content">
-        <div className="ticket__wrapper">
-          <span className="ticket__wrapper--head">HKT - MOV</span>
-          <span className="ticket__wrapper--content">{formatDate(dateBack, durationBack)}</span>
+      <div className={styles.content}>
+        <div className={styles.wrapper}>
+          <span className={styles.wrapperHead}>{`${originFrom} - ${destinationFrom}`}</span>
+          <span className={styles.wrapperContent}>{formatDate(dateBack, durationBack)}</span>
         </div>
-        <div className="ticket__wrapper">
-          <span className="ticket__wrapper--head">В ПУТИ</span>
-          <span className="ticket__wrapper--content">{durationTime(durationBack)}</span>
+        <div className={styles.wrapper}>
+          <span className={styles.wrapperHead}>В ПУТИ</span>
+          <span className={styles.wrapperContent}>{durationTime(durationBack)}</span>
         </div>
-        <div className="ticket__wrapper">
-          <div className="ticket__wrapper--head">
+        <div className={styles.wrapper}>
+          <div className={styles.wrapperHead}>
             {stopsBack.length} {changeWord(stopsBack.length)}
           </div>
-          <div className="ticket__wrapper--content">HKG, JNB</div>
+          <div className={styles.wrapperContent}>HKG, JNB</div>
         </div>
       </div>
     </li>

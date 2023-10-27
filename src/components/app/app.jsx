@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getSearchId, getTickets } from '../../store/apiSlice';
+import { fetchTickets } from '../../store/ticketSlice';
 import Header from '../header';
 import HeaderFilter from '../header-filter';
 import TicketsList from '../tickets-list';
@@ -9,22 +9,20 @@ import TicketsList from '../tickets-list';
 import './app.css';
 
 const App = () => {
-  const { stop, fetch500, searchId } = useSelector((state) => state.tickets);
+  const { stop, filters } = useSelector((state) => state.tickets);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getSearchId());
-  }, [dispatch]);
+    dispatch(fetchTickets());
+  }, [dispatch, stop]);
 
-  useEffect(() => {
-    if (!stop && searchId) dispatch(getTickets());
-  }, [dispatch, stop, fetch500, searchId]);
+  const noFilters = filters.every((elem) => !elem.checked) === false ? <TicketsList /> : <h1>Билетов не найдено</h1>;
 
   return (
     <div className="app">
       <Header />
       <HeaderFilter />
-      <TicketsList />
+      {noFilters}
     </div>
   );
 };
