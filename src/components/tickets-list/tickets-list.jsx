@@ -28,7 +28,7 @@ const TicketsList = () => {
 
   const sortedTickets = useMemo(() => {
     return sort(visibleTickets, sorting);
-  }, [tickets, sorting]);
+  }, [visibleTickets, sorting]);
 
   const warningMsg = <Alert message="Рейсов, подходящих под заданные фильтры, не найдено." type="info" showIcon />;
   const erorrMsg = <Alert message="Нет результатов. Попробуйте перезагрузить страницу." type="error" />;
