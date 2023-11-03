@@ -8,13 +8,14 @@ export const getTickets = async () => {
       const body = await fetchId.json();
       searchId = body.searchId;
     } else {
-      throw new Error(`Failed to fetch ${baseURL}search`);
+      throw new Error(`Failed to fetch ${baseURL} search`);
     }
   }
 
   const fetchTickets = await fetch(`${baseURL}/tickets?searchId=${searchId}`);
   if (fetchTickets.ok) {
     return fetchTickets.json();
+  } else {
+    throw new Error(fetchTickets.status);
   }
-  throw new Error(`Failed to fetch ${baseURL}tickets`);
 };
