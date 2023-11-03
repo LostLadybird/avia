@@ -2,13 +2,14 @@ import React, { useState, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { Spin, Alert } from 'antd';
 
+import sort from '../../utilites/sortingTickets';
 import Ticket from '../ticket';
 
 import styles from './tickets-list.module.scss';
 
 const TicketsList = () => {
   const tickets = useSelector((state) => state.tickets.tickets);
-  const { error, status, filters } = useSelector((state) => state.tickets);
+  const { error, status, filters, sorting } = useSelector((state) => state.tickets);
 
   const [extraTickets, setExtraTickets] = useState(5);
 
@@ -25,10 +26,14 @@ const TicketsList = () => {
     return variable;
   }, [tickets, filters]);
 
+  const sortedTickets = useMemo(() => {
+    return sort(visibleTickets, sorting);
+  }, [tickets, sorting]);
+
   const warningMsg = <Alert message="Рейсов, подходящих под заданные фильтры, не найдено." type="info" showIcon />;
   const erorrMsg = <Alert message="Нет результатов. Попробуйте перезагрузить страницу." type="error" />;
 
-  const elements = visibleTickets.slice(0, extraTickets).map((elem) => {
+  const elements = sortedTickets.slice(0, extraTickets).map((elem) => {
     return (
       <Ticket
         key={`${elem.price}${elem.carrier}${elem.segments[0].date}${elem.segments[1].date}`}
@@ -50,8 +55,8 @@ const TicketsList = () => {
 
   return (
     <ul className={styles.tickets}>
-      {status && <Spin className={styles.loading} size="large" />}
-      {error && erorrMsg}
+      {status && !error ? <Spin className={styles.loading} size="large" /> : null}
+      {error && !elements.length ? erorrMsg : null}
       {!elements && !error && !status && warningMsg}
       {elements}
       <div className={styles.showMore}>
