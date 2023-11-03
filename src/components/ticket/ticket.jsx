@@ -43,7 +43,7 @@ const Ticket = (props) => {
           <div className={styles.wrapperHead}>
             {stopsThere.length} {changeWord(stopsThere.length)}
           </div>
-          <div className={styles.wrapperContent}>HKG, JNB</div>
+          <div className={styles.wrapperContent}>{stopsThere.join(', ')}</div>
         </div>
       </div>
       <div className={styles.content}>
@@ -59,7 +59,7 @@ const Ticket = (props) => {
           <div className={styles.wrapperHead}>
             {stopsBack.length} {changeWord(stopsBack.length)}
           </div>
-          <div className={styles.wrapperContent}>HKG, JNB</div>
+          <div className={styles.wrapperContent}>{stopsBack.join(', ')}</div>
         </div>
       </div>
     </li>
