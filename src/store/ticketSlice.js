@@ -24,15 +24,22 @@ const ticketSlice = createSlice({
       { id: 2, text: '2 пересадки', checked: true, transfers: 2 },
       { id: 3, text: '3 пересадки', checked: true, transfers: 3 },
     ],
+    sorting: [{ cheapest: false }, { fastest: false }, { optimal: false }],
   },
   reducers: {
     sortByPrice(state) {
+      state.sorting[0] = true;
+      state.sorting[1] = false;
+      state.sorting[2] = false;
       const fitlerTickets = current(state.tickets).slice();
       state.tickets = fitlerTickets.sort((prev, next) => {
         return prev.price - next.price;
       });
     },
     sortByDuration(state) {
+      state.sorting[0] = false;
+      state.sorting[1] = true;
+      state.sorting[2] = false;
       const filterTickets = current(state.tickets).slice();
       state.tickets = filterTickets.sort((prev, next) => {
         const a = prev.segments[0].duration;
@@ -41,6 +48,9 @@ const ticketSlice = createSlice({
       });
     },
     sortByOptimal(state) {
+      state.sorting[0] = false;
+      state.sorting[1] = false;
+      state.sorting[2] = true;
       const fitlerTickets = current(state.tickets).slice();
       state.tickets = fitlerTickets.sort((prev, next) => {
         const a = prev.segments[0].duration;
@@ -78,6 +88,10 @@ const ticketSlice = createSlice({
     [fetchTickets.rejected]: (state, action) => {
       if (action.payload === '500') {
         state.status = true;
+        state.stop = !state.stop;
+      } else if (action.payload >= '400' && action.payload < '500') {
+        state.stop = true;
+        state.error = action.payload;
       } else {
         state.stop = !state.stop;
         state.error = action.payload;
