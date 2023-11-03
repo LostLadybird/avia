@@ -20,13 +20,13 @@ const HeaderFilter = () => {
     <div className={styles.wrapper}>
       <AsideFilter />
       <Radio.Group className={styles.buttons} onChange={onChange} value={buttonValue}>
-        <Radio.Button className={styles.btn} value={1} onClick={() => dispatch(sortByPrice())}>
+        <Radio.Button className={styles.btn} value={1} onClick={(e) => dispatch(sortByPrice(e.target.value))}>
           Самый дешевый
         </Radio.Button>
-        <Radio.Button className={styles.btn} value={2} onClick={() => dispatch(sortByDuration())}>
+        <Radio.Button className={styles.btn} value={2} onClick={(e) => dispatch(sortByDuration(e.target.value))}>
           Самый быстрый
         </Radio.Button>
-        <Radio.Button className={styles.btn} value={3} onClick={() => dispatch(sortByOptimal())}>
+        <Radio.Button className={styles.btn} value={3} onClick={(e) => dispatch(sortByOptimal(e.target.value))}>
           Оптимальный
         </Radio.Button>
       </Radio.Group>
