@@ -1,4 +1,4 @@
-import { createSlice, current, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 import { getTickets } from './apiSlice';
 
@@ -31,34 +31,16 @@ const ticketSlice = createSlice({
       state.sorting[0] = true;
       state.sorting[1] = false;
       state.sorting[2] = false;
-      const fitlerTickets = current(state.tickets).slice();
-      state.tickets = fitlerTickets.sort((prev, next) => {
-        return prev.price - next.price;
-      });
     },
     sortByDuration(state) {
       state.sorting[0] = false;
       state.sorting[1] = true;
       state.sorting[2] = false;
-      const filterTickets = current(state.tickets).slice();
-      state.tickets = filterTickets.sort((prev, next) => {
-        const a = prev.segments[0].duration;
-        const b = next.segments[0].duration;
-        return a - b;
-      });
     },
     sortByOptimal(state) {
       state.sorting[0] = false;
       state.sorting[1] = false;
       state.sorting[2] = true;
-      const fitlerTickets = current(state.tickets).slice();
-      state.tickets = fitlerTickets.sort((prev, next) => {
-        const a = prev.segments[0].duration;
-        const b = next.segments[0].duration;
-        const res = a + prev.price;
-        const res2 = b + next.price;
-        return res - res2;
-      });
     },
     checkFilterAll(state, action) {
       state.filters = state.filters.map((elem) => ({ ...elem, checked: action.payload }));
@@ -78,7 +60,7 @@ const ticketSlice = createSlice({
     },
     [fetchTickets.fulfilled]: (state, action) => {
       state.status = true;
-      state.tickets = [...state.tickets, ...action.payload.tickets];
+      state.tickets = [...action.payload.tickets, ...state.tickets];
       if (!action.payload.stop) {
         state.stop = !state.stop;
       } else {
