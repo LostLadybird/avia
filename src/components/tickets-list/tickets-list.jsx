@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { Spin, Alert } from 'antd';
 
 import sort from '../../utilites/sortingTickets';
+import transfer from '../../utilites/transferTickets';
+import uniqueKey from '../../utilites/key';
 import Ticket from '../ticket';
 
 import styles from './tickets-list.module.scss';
@@ -17,26 +19,23 @@ const TicketsList = () => {
     setExtraTickets(extraTickets + 5);
   };
 
-  const visibleTickets = useMemo(() => {
-    const activeFilters = filters.filter((elem) => elem.checked);
-    const variable = tickets.filter((elem) => {
-      const data = elem.segments[0].stops.length;
-      return activeFilters.some((elem) => elem.transfers === data);
-    });
-    return variable;
+  const transferTickets = useMemo(() => {
+    return transfer(tickets, filters);
   }, [tickets, filters]);
 
   const sortedTickets = useMemo(() => {
-    return sort(visibleTickets, sorting);
-  }, [visibleTickets, sorting]);
+    return sort(transferTickets, sorting);
+  }, [transferTickets, sorting]);
+
+  const visibleTickets = sortedTickets.slice(0, extraTickets);
 
   const warningMsg = <Alert message="Рейсов, подходящих под заданные фильтры, не найдено." type="info" showIcon />;
   const erorrMsg = <Alert message="Нет результатов. Попробуйте перезагрузить страницу." type="error" />;
 
-  const elements = sortedTickets.slice(0, extraTickets).map((elem) => {
+  const elements = visibleTickets.map((elem) => {
     return (
       <Ticket
-        key={`${elem.price}${elem.carrier}${elem.segments[0].date}${elem.segments[1].date}`}
+        key={uniqueKey()}
         price={elem.price}
         img={elem.carrier}
         originTo={elem.segments[0].origin}
