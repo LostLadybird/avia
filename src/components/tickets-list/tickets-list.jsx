@@ -4,7 +4,6 @@ import { Spin, Alert } from 'antd';
 
 import sort from '../../utilites/sortingTickets';
 import transfer from '../../utilites/transferTickets';
-import uniqueKey from '../../utilites/key';
 import Ticket from '../ticket';
 
 import styles from './tickets-list.module.scss';
@@ -35,7 +34,7 @@ const TicketsList = () => {
   const elements = visibleTickets.map((elem) => {
     return (
       <Ticket
-        key={uniqueKey()}
+        key={`${elem.price}${elem.carrier}${elem.segments[0].date}${elem.segments[1].date}`}
         price={elem.price}
         img={elem.carrier}
         originTo={elem.segments[0].origin}
